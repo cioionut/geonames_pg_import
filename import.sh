@@ -104,6 +104,7 @@ PREFIX="_"
 COUNTRY_FILES=(
   # "allCountries.zip"
   'US.zip'
+  'GB.zip'
   'CA.zip'
   'NL.zip'
   'DE.zip'
@@ -260,51 +261,51 @@ if [[ "${IMPORT_DATA}" == "true" ]]; then
           \copy geoname (id, name, ascii_name, alternate_names, latitude, longitude,\
                         feature_class, feature_code, country, cc2, admin1, admin2,\
                         admin3, admin4, population, elevation, dem, timezone, modified_on)\
-              from '${WORKPATH}/${TMPPATH}/${FILE%.*}.txt' null as '';
+              from '${WORKPATH}/${TMPPATH}/${FILE%.*}.txt' null '';
 SQL
   done
-
+  # exit 0
   psql -e ${PSQL_COMMAND} << SQL
     SET search_path TO $SCHEMA;
 
     \copy hierarchy (parent_id, child_id, type)\
-      from '${WORKPATH}/${TMPPATH}/hierarchy.txt' null as '';
+      from '${WORKPATH}/${TMPPATH}/hierarchy.txt' null '';
 
     -- \copy postal_codes (country_code, postal_code, place_name,\
     -- 				  admin1_name, admin1_code, admin2_name, admin2_code,\
     -- 				  admin3_name, admin3_code,\
     -- 				  latitude, longitude,accuracy)\
-    -- 	from '${WORKPATH}/${PCPATH}/allCountries.txt' null as '';
+    -- 	from '${WORKPATH}/${PCPATH}/allCountries.txt' null '';
 
     \copy time_zones (country_code, id, gmt_offset, dst_offset, raw_offset)\
-      from '${WORKPATH}/${TMPPATH}/timeZones.txt.tmp' null as '';
+      from '${WORKPATH}/${TMPPATH}/timeZones.txt.tmp' null '';
 
     \copy feature_codes (code, name, description)\
-      from '${WORKPATH}/${TMPPATH}/featureCodes_en.txt' null as '';
+      from '${WORKPATH}/${TMPPATH}/featureCodes_en.txt' null '';
 
     \copy admin1_codes (code, name, name_ascii, geoname_id)\
-      from '${WORKPATH}/${TMPPATH}/admin1CodesASCII.txt' null as '';
+      from '${WORKPATH}/${TMPPATH}/admin1CodesASCII.txt' null '';
 
     \copy admin2_codes (code, name, name_ascii, geoname_id)\
-      from '${WORKPATH}/${TMPPATH}/admin2Codes.txt' null as '';
+      from '${WORKPATH}/${TMPPATH}/admin2Codes.txt' null '';
 
     \copy admin5_codes (geoname_id, admin5)\
-      from '${WORKPATH}/${TMPPATH}/adminCode5.txt' null as '';
+      from '${WORKPATH}/${TMPPATH}/adminCode5.txt' null '';
 
     \copy iso_language_codes (iso_639_3, iso_639_2, iso_639_1, language_name)\
-      from '${WORKPATH}/${TMPPATH}/iso-languagecodes.txt.tmp' null as '';
+      from '${WORKPATH}/${TMPPATH}/iso-languagecodes.txt.tmp' null '';
 
     \copy country_info (iso_alpha2, iso_alpha3, iso_numeric, fips_code, country,\
               capital, area, population, continent, tld, currency_code,\
               currency_name, phone, postal, postal_regex, languages,\
               geoname_id, neighbours, equivalent_fips_code)\
-      from '${WORKPATH}/${TMPPATH}/countryInfo.txt.tmp' null as '';
+      from '${WORKPATH}/${TMPPATH}/countryInfo.txt.tmp' null '';
 
     -- \copy alternate_names (id,geoname_id, iso_language, alternate_name,\
     -- 					  is_preferred_name, is_short_name,\
     -- 					  is_colloquial, is_historic,\
     -- 					  usage_from, usage_to)\
-    -- 	from '${WORKPATH}/${TMPPATH}/alternateNamesV2.txt' null as '';
+    -- 	from '${WORKPATH}/${TMPPATH}/alternateNamesV2.txt' null '';
 SQL
 fi
 
